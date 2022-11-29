@@ -6,8 +6,16 @@ image:
   file: .gitpod.dockerfile
 
 tasks:
-  - init: npm install && npm run build
-    command: npm run dev
+  - init: 
+      npm install
+      composer install
+    command:
+      mysql -e "CREATE USER 'laravel'@'localhost' IDENTIFIED BY 'password';"
+      mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'laravel'@'localhost' WITH GRANT OPTION;"
+      mysql -e "FLUSH PRIVILEGES;"
+      mysql -e "CREATE DATABASE laravel;"
+      php artisan migrate
+      npm run dev
 
 vscode:
   extensions:
